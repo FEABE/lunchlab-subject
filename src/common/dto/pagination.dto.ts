@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, Max, Min } from 'class-validator';
 
 export class PaginationDto {
   @ApiProperty({
@@ -15,12 +15,15 @@ export class PaginationDto {
 
   @ApiProperty({
     required: false,
-    description: '한 페이지당 항목 수',
+    description: '한 페이지당 항목 수 (1-100)',
     default: 10,
-    example: 10,
+    minimum: 1,
+    maximum: 100,
   })
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
+  @Min(1)
+  @Max(100)
   take?: number = 10;
 }
