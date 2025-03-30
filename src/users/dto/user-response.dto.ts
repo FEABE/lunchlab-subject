@@ -21,6 +21,9 @@ export class UserResponseDto {
   @ApiProperty({ enum: Role, example: Role.USER })
   role: Role;
 
+  @ApiProperty({ example: null, required: false })
+  refreshToken?: string | null;
+
   @ApiProperty({ example: '2024-03-29T10:30:00.000Z' })
   createdAt: Date;
 

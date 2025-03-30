@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   ParseIntPipe,
   Patch,
@@ -10,6 +11,7 @@ import {
   Query,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
@@ -17,6 +19,9 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { Role } from '@prisma/client';
+import { Public } from 'src/common/decorators/public.decorator';
+import { Roles } from 'src/common/decorators/roles.decorator';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
@@ -28,10 +33,13 @@ import { UsersService } from '../services/users.service';
 
 @ApiTags('users')
 @Controller('users')
+@ApiBearerAuth()
 export class UsersController {
+  private readonly logger = new Logger(UsersController.name);
   constructor(private readonly usersService: UsersService) {}
 
   @Post('signup')
+  @Public()
   @ApiOperation({
     summary: '회원 가입',
     description: '새로운 사용자를 생성합니다.',
@@ -44,10 +52,12 @@ export class UsersController {
     description: '이미 존재하는 사용자명입니다.',
   })
   async signup(@Body() createUserDto: CreateUserDto) {
+    this.logger.debug(`Creating user: ${JSON.stringify(createUserDto)}`);
     return this.usersService.create(createUserDto);
   }
 
   @Get()
+  @Roles(Role.ADMIN)
   @ApiOperation({
     summary: '사용자 목록 조회',
     description: '커서 기반 페이지네이션으로 사용자 목록을 조회합니다.',
@@ -61,6 +71,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @Roles(Role.ADMIN)
   @ApiOperation({
     summary: '특정 사용자 조회',
     description: 'ID로 특정 사용자를 조회합니다.',
@@ -77,6 +88,7 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @Roles(Role.ADMIN)
   @ApiOperation({
     summary: '사용자 정보 수정',
     description: '특정 사용자의 정보를 수정합니다.',
@@ -99,6 +111,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN)
   @ApiOperation({
     summary: '사용자 삭제',
     description: '특정 사용자를 삭제합니다.',

@@ -79,6 +79,7 @@ export class UsersService {
         phone: true,
         company: true,
         role: true,
+        refreshToken: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -161,9 +162,20 @@ export class UsersService {
     return { message: `User with ID ${id} has been deleted` };
   }
 
-  async findByUsername(username: string) {
+  async findByUsername(username: string, includePassword = false) {
     return this.prisma.user.findUnique({
       where: { username },
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        phone: true,
+        company: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+        password: includePassword,
+      },
     });
   }
 }

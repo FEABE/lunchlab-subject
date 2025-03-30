@@ -4,7 +4,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: ['error', 'warn', 'debug', 'log', 'verbose'],
+    bufferLogs: true, // 로그 버퍼링 활성화 // 모든 로그 레벨 활성화
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -13,6 +16,7 @@ async function bootstrap() {
       transform: true, // 요청 데이터를 DTO 타입으로 자동 변환
     }),
   );
+  app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
     .setTitle('LunchLab API')
