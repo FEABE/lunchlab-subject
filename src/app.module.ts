@@ -6,6 +6,7 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { envConfig } from './config/env.config';
 import { PrismaModule } from './prisma/prisma.module';
+import { ProductPolicyModule } from './product/product-policy.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -13,6 +14,7 @@ import { UsersModule } from './users/users.module';
     PrismaModule,
     UsersModule,
     AuthsModule,
+    ProductPolicyModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [envConfig],
