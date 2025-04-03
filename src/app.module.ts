@@ -5,7 +5,7 @@ import { AuthsModule } from './auths/auths.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { envConfig } from './config/env.config';
-import { OrderModule } from './order/\border.module';
+import { OrderModule } from './order/order.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProductPolicyModule } from './product/product-policy.module';
 import { ProductModule } from './product/product.module';
